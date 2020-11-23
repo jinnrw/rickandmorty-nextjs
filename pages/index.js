@@ -5,7 +5,11 @@ import Filter from "./component/Filter";
 import LoadMore from "./component/LoadMore";
 import styles from "../styles/Home.module.scss";
 import { getStatus, getSpecies } from "../utils/fetch-data";
-import { getSpeciesQuery, getStatusQuery } from "../utils/get-query";
+import {
+  getSpeciesQuery,
+  getStatusQuery,
+  getAllCharactersQuery,
+} from "../utils/get-query";
 
 const { createApolloFetch } = require("apollo-fetch");
 const fetch = createApolloFetch({
@@ -47,9 +51,9 @@ export async function getServerSideProps() {
 }
 
 export default function Home({ data }) {
-  const { episodes } = data;
-  const [characters, setCharacters] = useState(data.characters);
-  const [selectedCategory, setSelectedCategory] = useState();
+  const defaultCharacters = { ...data.characters };
+  const [characters, setCharacters] = useState(defaultCharacters);
+  const [selectedCategory, setSelectedCategory] = useState("All");
   const [selectedFilter, setSelectedFilter] = useState();
   const SPECIES = ["human", "alien", "disease", "creature"];
   const STATUS = ["alive", "Dead", "Unknown"];
@@ -60,7 +64,10 @@ export default function Home({ data }) {
       res = await getSpecies(getSpeciesQuery(page, filter));
     } else if (selectedCategory === "Status") {
       res = await getStatus(getStatusQuery(page, filter));
+    } else if (selectedCategory === "All") {
+      res = await getStatus(getAllCharactersQuery(characters.info.next));
     }
+
     let newCharacters = {
       ...characters,
       info: res.info,

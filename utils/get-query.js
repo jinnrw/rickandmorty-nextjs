@@ -43,3 +43,26 @@ export const getStatusQuery = (page, status) => {
     }`,
   };
 };
+
+export const getAllCharactersQuery = (page) => {
+  return {
+    query: `query {
+      characters(page: ${page}) {
+        info {
+          count
+          next
+        }
+        results {
+          id
+          name
+          status
+          species
+          origin {
+            name
+          }
+          image
+        }
+      }
+    }`,
+  };
+};
