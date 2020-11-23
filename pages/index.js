@@ -1,65 +1,144 @@
-import Head from 'next/head'
-import styles from '../styles/Home.module.css'
+import { Fragment, useState } from "react";
+import Head from "next/head";
+import Character from "./component/Character";
+import Filter from "./component/Filter";
+import LoadMore from "./component/LoadMore";
+import styles from "../styles/Home.module.scss";
+import { getStatus, getSpecies } from "../utils/fetch-data";
+import { getSpeciesQuery, getStatusQuery } from "../utils/get-query";
 
-export default function Home() {
+const { createApolloFetch } = require("apollo-fetch");
+const fetch = createApolloFetch({
+  uri: "https://rickandmortyapi.com/graphql/",
+});
+
+export async function getServerSideProps() {
+  const data = await fetch({
+    query: `query {
+      characters(page:1) {
+        info {
+          count
+          next
+        }
+        results {
+          id
+          name
+          status
+          species
+          origin {
+            name
+          }
+          image
+        }
+      }
+      episodes(page:1) {
+        info {
+          count
+        }
+      }
+    }`,
+  }).then((res) => res.data);
+
+  return {
+    props: {
+      data,
+    },
+  };
+}
+
+export default function Home({ data }) {
+  const { episodes } = data;
+  const [characters, setCharacters] = useState(data.characters);
+  const [selectedCategory, setSelectedCategory] = useState();
+  const [selectedFilter, setSelectedFilter] = useState();
+  const SPECIES = ["human", "alien", "disease", "creature"];
+  const STATUS = ["alive", "Dead", "Unknown"];
+
+  const fetchMoreCharacters = async (page, filter) => {
+    let res;
+    if (selectedCategory === "Species") {
+      res = await getSpecies(getSpeciesQuery(page, filter));
+    } else if (selectedCategory === "Status") {
+      res = await getStatus(getStatusQuery(page, filter));
+    }
+    let newCharacters = {
+      ...characters,
+      info: res.info,
+      results: [...characters.results, ...res.results],
+    };
+    setCharacters(newCharacters);
+  };
+
   return (
     <div className={styles.container}>
       <Head>
-        <title>Create Next App</title>
+        <title>Rick and Morty API | Next.js</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-
+      <header className={styles.header}>
+        <div className={styles.logo}>Rick and Morty API</div>
+      </header>
       <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
-
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
-
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className={styles.card}
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
+        <aside className={styles.sidebar}>
+          {/* TODO: SHOW ALL */}
+          <Filter
+            filterBy="Species"
+            filters={SPECIES}
+            getMethods={SPECIES.map((species) =>
+              getSpecies(getSpeciesQuery(1, species))
+            )}
+            setCharacters={setCharacters}
+            setSelectedCategory={() => {
+              setSelectedCategory("Species");
+            }}
+            setSelectedFilter={setSelectedFilter}
+          />
+          <Filter
+            filterBy="Status"
+            filters={STATUS}
+            getMethods={STATUS.map((status) =>
+              getStatus(getStatusQuery(1, status))
+            )}
+            setCharacters={setCharacters}
+            setSelectedCategory={() => {
+              setSelectedCategory("Status");
+            }}
+            setSelectedFilter={setSelectedFilter}
+          />
+        </aside>
+        <div className={styles.content}>
+          <div className={styles.content__header}>
+            Results: {characters.results.length} / {characters.info.count}
+          </div>
+          <div className={styles.characterList}>
+            {characters.results.map((result) => {
+              const { id, name, status, origin, species, image } = result;
+              return (
+                <Character
+                  key={id}
+                  name={name}
+                  status={status}
+                  species={species}
+                  origin={origin}
+                  image={image}
+                />
+              );
+            })}
+          </div>
+          {typeof characters.info.next === "number" ? (
+            <LoadMore
+              fetchMoreCharacters={() => {
+                fetchMoreCharacters(characters.info.next, selectedFilter);
+              }}
+            />
+          ) : (
+            <Fragment />
+          )}
         </div>
       </main>
-
       <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
-        </a>
+        <p>Made with Next.js</p>
       </footer>
     </div>
-  )
+  );
 }

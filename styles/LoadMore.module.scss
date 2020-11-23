@@ -1,0 +1,14 @@
+.loadMore {
+  text-align: center;
+  padding: 10px 20px;
+  border-radius: 6px;
+  background-color: #dedede;
+  cursor: pointer;
+  width: 210px;
+  margin: 0 auto;
+  transition: 0.2s background-color ease;
+
+  &:hover {
+    background-color: #afafaf;
+  }
+}
