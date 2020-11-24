@@ -17,10 +17,11 @@ Visit the [demo](http://rick-and-morty-search.surge.sh/) here!
 
 ## Built With
 - Next.js
+  - Pre-rendering 
+  - Static Generation
 - GraphQL
 - [rickandmortyapi](https://rickandmortyapi.com/)
 - CSS Modules
 - apollo-fetch
 - async, await
-- Server-side Rendering, `getServerSideProps` (Switch to `getStaticProps` due to hosting as static website)
 
