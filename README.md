@@ -19,9 +19,8 @@ Visit the [demo](http://rick-and-morty-search.surge.sh/) here!
 - Next.js
   - Pre-rendering 
   - Static Generation
-- GraphQL
+- GraphQL, apollo-fetch
 - [rickandmortyapi](https://rickandmortyapi.com/)
 - CSS Modules
-- apollo-fetch
 - async, await
 
