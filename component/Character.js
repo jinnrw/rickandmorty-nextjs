@@ -1,4 +1,4 @@
-import styles from "../../styles/Character.module.scss";
+import styles from "../styles/Character.module.scss";
 
 function Character(props) {
   const { id, name, status, origin, species, image } = props;

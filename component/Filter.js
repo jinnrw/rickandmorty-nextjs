@@ -1,4 +1,4 @@
-import styles from "../../styles/Filter.module.scss";
+import styles from "../styles/Filter.module.scss";
 import { Fragment } from "react";
 
 function Filter(props) {

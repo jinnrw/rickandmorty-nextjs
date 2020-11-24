@@ -1,8 +1,8 @@
 import { Fragment, useState } from "react";
 import Head from "next/head";
-import Character from "./component/Character";
-import Filter from "./component/Filter";
-import LoadMore from "./component/LoadMore";
+import Character from "../component/Character";
+import Filter from "../component/Filter";
+import LoadMore from "../component/LoadMore";
 import styles from "../styles/Home.module.scss";
 import { getStatus, getSpecies } from "../utils/fetch-data";
 import {
@@ -16,7 +16,7 @@ const fetch = createApolloFetch({
   uri: "https://rickandmortyapi.com/graphql/",
 });
 
-export async function getServerSideProps() {
+export async function getStaticProps() {
   const data = await fetch({
     query: `query {
       characters(page:1) {
@@ -79,11 +79,11 @@ export default function Home({ data }) {
   return (
     <div className={styles.container}>
       <Head>
-        <title>Rick and Morty API | Next.js</title>
+        <title>Rick and Morty Search</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <header className={styles.header}>
-        <div className={styles.logo}>Rick and Morty API</div>
+        <div className={styles.logo}>Rick and Morty Search</div>
       </header>
       <main className={styles.main}>
         <aside className={styles.sidebar}>

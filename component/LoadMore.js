@@ -1,4 +1,4 @@
-import styles from "../../styles/LoadMore.module.scss";
+import styles from "../styles/LoadMore.module.scss";
 
 function LoadMore(props) {
   const { fetchMoreCharacters } = props;
