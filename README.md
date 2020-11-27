@@ -13,7 +13,6 @@ Visit the [demo](http://rick-and-morty-search.surge.sh/) here!
   - Pre-rendering 
   - Static Generation
 - GraphQL, apollo-fetch
-- [rickandmortyapi](https://rickandmortyapi.com/)
+- [The Rick And Morty API](https://rickandmortyapi.com/)
 - CSS Modules
 - async, await
-
