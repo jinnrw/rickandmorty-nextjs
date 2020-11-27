@@ -7,7 +7,7 @@ Visit the [demo](http://rick-and-morty-search.surge.sh/) here!
   - Static Generation
 - GraphQL, apollo-fetch
 - [The Rick And Morty API](https://rickandmortyapi.com/)
-- CSS Modules, CSS Grid
+- CSS Modules
 - async, await
 
 ## Run Locally
