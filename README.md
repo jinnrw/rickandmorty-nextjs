@@ -1,10 +1,3 @@
-## Run Locally
-```bash
-npm run dev
-# or
-yarn dev
-```
-
 ## Demo
 Visit the [demo](http://rick-and-morty-search.surge.sh/) here!
 
@@ -14,5 +7,12 @@ Visit the [demo](http://rick-and-morty-search.surge.sh/) here!
   - Static Generation
 - GraphQL, apollo-fetch
 - [The Rick And Morty API](https://rickandmortyapi.com/)
-- CSS Modules
+- CSS Modules, CSS Grid
 - async, await
+
+## Run Locally
+```bash
+npm run dev
+# or
+yarn dev
+```
