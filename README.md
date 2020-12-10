@@ -1,3 +1,5 @@
+Search for Rick and Morty characters via GraphQL using [The Rick and Morty API](https://rickandmortyapi.com/).
+
 ## Demo
 Visit the [demo](http://rick-and-morty-search.surge.sh/) here!
 
