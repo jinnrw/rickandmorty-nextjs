@@ -7,8 +7,10 @@ function Filter(props) {
     filters,
     getMethods,
     setCharacters,
+    selectedFilter,
     setSelectedFilter,
-    setSelectedCategory
+    setSelectedCategory,
+    resultsCounter
   } = props;
 
   return (
@@ -18,11 +20,14 @@ function Filter(props) {
         {filters.map((filter, index) => (
           <div key={filter} className={styles.filter__item}>
             <button
-              className={styles.filter__button}
+              className={`${styles.filter__button} ${
+                selectedFilter === filter
+                  ? `${styles.filter__button__selected}`
+                  : ""
+              }`}
               onClick={async () => {
                 let result = await getMethods[index];
                 // setState after Promise resolved
-                console.log(result);
                 setCharacters(result);
                 setSelectedFilter(filter);
                 setSelectedCategory();
@@ -30,6 +35,13 @@ function Filter(props) {
             >
               {filter}
             </button>
+            {selectedFilter === filter ? (
+              <div className={styles.resultsCounter}>
+                ({resultsCounter})
+              </div>
+            ) : (
+              <Fragment />
+            )}
           </div>
         ))}
       </div>

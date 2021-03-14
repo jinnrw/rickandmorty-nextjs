@@ -3,12 +3,7 @@ const fetch = createApolloFetch({
   uri: "https://rickandmortyapi.com/graphql/",
 });
 
-export const getStatus = async (query) => {
-  const res = await fetch(query);
-  return res.data.characters;
-};
-
-export const getSpecies = async (query) => {
+export const getCharacters = async (query) => {
   const res = await fetch(query);
   return res.data.characters;
 };

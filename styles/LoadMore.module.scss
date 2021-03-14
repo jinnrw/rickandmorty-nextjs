@@ -1,14 +1,17 @@
+@import "./Variables";
+
 .loadMore {
   text-align: center;
   padding: 10px 20px;
   border-radius: 6px;
-  background-color: #dedede;
   cursor: pointer;
   width: 210px;
   margin: 0 auto;
-  transition: 0.2s background-color ease;
+  transition: 0.3s box-shadow ease;
+  // border: 1px solid;
+  box-shadow: 0 0 0 1px $primary-color;
 
   &:hover {
-    background-color: #afafaf;
+    box-shadow: 0 0 0 2px $primary-color;
   }
 }

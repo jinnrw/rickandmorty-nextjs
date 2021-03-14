@@ -1,18 +1,18 @@
 import styles from "../styles/LoadMore.module.scss";
 
 function LoadMore(props) {
-  const { fetchMoreCharacters } = props;
+  const { fetchCharacters } = props;
 
   return (
     <div
       className={styles.loadMore}
       onClick={() => {
         {
-          fetchMoreCharacters();
+          fetchCharacters();
         }
       }}
     >
-      Load More...
+      Load Characters
     </div>
   );
 }

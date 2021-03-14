@@ -44,7 +44,7 @@ export const getStatusQuery = (page, status) => {
   };
 };
 
-export const getAllCharactersQuery = (page) => {
+export const getAllCharactersQuery = (page=1) => {
   return {
     query: `query {
       characters(page: ${page}) {

@@ -1,13 +1,15 @@
 .character {
-  overflow: hidden;
-  box-shadow: 0 5px 10px rgba(154, 160, 185, 0.05),
-    0 15px 40px rgba(166, 173, 201, 0.2);
-  border-radius: 10px;
   display: flex;
-  height: 220px;
 
   .characterImage {
-    width: 50%;
+    width: 100px;
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border-radius: 50%;
+    overflow: hidden;
 
     img {
       width: 100%;
@@ -15,19 +17,44 @@
   }
 
   .characterInfo {
-    width: 50%;
-    padding: 15px 10px;
     line-height: 26px;
+    padding: 15px;
+    flex: 1;
 
     .name {
-      font-size: 20px;
-      font-weight: 800;
+      font-size: 22px;
+      margin-bottom: 4px;
     }
 
     .statusSpecies {
       display: flex;
+      line-height: 22px;
+      align-items: center;
 
       .status {
+        width: 8px;
+        height: 8px;
+        background-color: #fff;
+        border-radius: 50%;
+        margin-right: 8px;
+        cursor: pointer;
+
+        &__Alive {
+          background-color: rgb(15, 190, 38);
+        }
+
+        &__Dead {
+          background-color: rgb(255, 41, 41);
+        }
+
+        &__unknown {
+          background-color: rgb(190, 190, 190);
+        }
+      }
+
+      .species {
+        font-size: 17px;
+        font-weight: 300;
       }
     }
   }
