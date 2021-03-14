@@ -4,12 +4,7 @@ import Character from "../component/Character";
 import Filter from "../component/Filter";
 import LoadMore from "../component/LoadMore";
 import styles from "../styles/Home.module.scss";
-import { getCharacters } from "../utils/fetch-data";
-import {
-  getSpeciesQuery,
-  getStatusQuery,
-  getAllCharactersQuery,
-} from "../utils/get-query";
+import { queryCreator, queryAllCharacters } from "../api/queries";
 import {
   CATEGORY_SHOWALL,
   CHAR_SPECIES,
@@ -17,39 +12,10 @@ import {
   CATEGORY_SPECIES,
   CATEGORY_STATUS,
 } from "../constants";
-
-const { createApolloFetch } = require("apollo-fetch");
-const fetch = createApolloFetch({
-  uri: "https://rickandmortyapi.com/graphql/",
-});
+import { fetchData } from "../api/apolloClient";
 
 export async function getStaticProps() {
-  const data = await fetch({
-    query: `query {
-      characters(page:1) {
-        info {
-          count
-          next
-        }
-        results {
-          id
-          name
-          status
-          species
-          origin {
-            name
-          }
-          image
-        }
-      }
-      episodes(page:1) {
-        info {
-          count
-        }
-      }
-    }`,
-  }).then((res) => res.data);
-
+  const data = await fetchData(queryAllCharacters());
   return {
     props: {
       data,
@@ -58,19 +24,17 @@ export async function getStaticProps() {
 }
 
 export default function Home({ data }) {
-  const defaultCharacters = { ...data.characters };
+  const defaultCharacters = { ...data };
   const [characters, setCharacters] = useState(defaultCharacters);
   const [selectedCategory, setSelectedCategory] = useState(CATEGORY_SHOWALL);
   const [selectedFilter, setSelectedFilter] = useState();
 
   const fetchCharacters = async (page = 1, filter) => {
     let res;
-    if (selectedCategory === CATEGORY_SPECIES) {
-      res = await getCharacters(getSpeciesQuery(page, filter));
-    } else if (selectedCategory === CATEGORY_STATUS) {
-      res = await getCharacters(getStatusQuery(page, filter));
-    } else if (selectedCategory === CATEGORY_SHOWALL) {
-      res = await getCharacters(getAllCharactersQuery(characters.info.next));
+    if (selectedCategory === CATEGORY_SHOWALL) {
+      res = await fetchData(queryAllCharacters(characters.info.next));
+    } else {
+      res = await fetchData(queryCreator(page, selectedCategory, filter));
     }
 
     if (page > 1) {
@@ -85,7 +49,7 @@ export default function Home({ data }) {
   };
   // TODO: Refactor setSelectedFilter & setSelectedCategory
   const fetchAllCharacters = async () => {
-    let res = await getCharacters(getAllCharactersQuery(1));
+    let res = await fetchData(queryAllCharacters());
     setCharacters(res);
     setSelectedFilter(CATEGORY_SHOWALL);
     setSelectedCategory(CATEGORY_SHOWALL);
@@ -140,8 +104,8 @@ export default function Home({ data }) {
           <Filter
             filterBy={CATEGORY_SPECIES}
             filters={CHAR_SPECIES}
-            getMethods={CHAR_SPECIES.map((species) =>
-              getCharacters(getSpeciesQuery(1, species))
+            fetchQueries={CHAR_SPECIES.map((species) =>
+              queryCreator(1, CATEGORY_SPECIES, species)
             )}
             setCharacters={setCharacters}
             setSelectedCategory={() => {
@@ -154,8 +118,8 @@ export default function Home({ data }) {
           <Filter
             filterBy={CATEGORY_STATUS}
             filters={CHAR_STATUS}
-            getMethods={CHAR_STATUS.map((status) =>
-              getCharacters(getStatusQuery(1, status))
+            fetchQueries={CHAR_STATUS.map((status) =>
+              queryCreator(1, CATEGORY_STATUS, status)
             )}
             setCharacters={setCharacters}
             setSelectedCategory={() => {
@@ -202,7 +166,12 @@ export default function Home({ data }) {
           <p>Built with Next.js & GraphQL</p>
           <p>
             See{" "}
-            <a href="https://github.com/jinnrw/rickandmorty-nextjs" target="_blank">Source</a>
+            <a
+              href="https://github.com/jinnrw/rickandmorty-nextjs"
+              target="_blank"
+            >
+              Source
+            </a>
           </p>
         </div>
       </footer>

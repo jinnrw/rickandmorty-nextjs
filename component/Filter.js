@@ -1,16 +1,17 @@
 import styles from "../styles/Filter.module.scss";
 import { Fragment } from "react";
+import { fetchData } from "../api/apolloClient";
 
 function Filter(props) {
   const {
     filterBy,
     filters,
-    getMethods,
+    fetchQueries,
     setCharacters,
     selectedFilter,
     setSelectedFilter,
     setSelectedCategory,
-    resultsCounter
+    resultsCounter,
   } = props;
 
   return (
@@ -26,9 +27,9 @@ function Filter(props) {
                   : ""
               }`}
               onClick={async () => {
-                let result = await getMethods[index];
+                let res = await fetchData(fetchQueries[index]);
                 // setState after Promise resolved
-                setCharacters(result);
+                setCharacters(res);
                 setSelectedFilter(filter);
                 setSelectedCategory();
               }}
@@ -36,9 +37,7 @@ function Filter(props) {
               {filter}
             </button>
             {selectedFilter === filter ? (
-              <div className={styles.resultsCounter}>
-                ({resultsCounter})
-              </div>
+              <div className={styles.resultsCounter}>({resultsCounter})</div>
             ) : (
               <Fragment />
             )}
