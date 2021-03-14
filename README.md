@@ -8,7 +8,7 @@ Visit the [demo](http://rick-and-morty-search.surge.sh/) here!
   - Pre-rendering 
   - Static Generation
 - GraphQL
-  - apollo-fetch (the package is deprecated, will migrate to Apollo at some point)
+  - [Apollo GraphQL](https://www.apollographql.com/docs/)
 - [The Rick And Morty API](https://rickandmortyapi.com/)
 - CSS Modules
 - async, await
